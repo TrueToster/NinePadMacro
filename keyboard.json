@@ -5,6 +5,7 @@
     "development_board": "promicro_rp2040",
     "diode_direction": "ROW2COL",
     "features": {
+        "raw": true,
         "bootmagic": true,
         "extrakey": true,
         "mousekey": false,

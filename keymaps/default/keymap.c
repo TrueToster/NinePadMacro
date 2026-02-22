@@ -152,8 +152,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void raw_hid_receive(uint8_t *data, uint8_t length) { }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    uint8_t data[32] = {0}; 
-    data[0] = get_highest_layer(state);
-    raw_hid_send(data, 32);
+    uint8_t data[2] = {0x01, get_highest_layer(state)};
+    raw_hid_send(data, 2);
     return state;
 }
