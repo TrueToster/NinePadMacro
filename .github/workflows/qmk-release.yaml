@@ -1,0 +1,31 @@
+name: Build and Release qmk firmware
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install QMK CLI
+        run: pip3 install qmk
+
+      - name: Build Firmware
+        run: |
+          qmk setup -y
+          qmk compile -kb nine_pad -km default -workdir ./qmk
+
+      - name: Upload UF2 to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            *.uf2
+            qmk/*.uf2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

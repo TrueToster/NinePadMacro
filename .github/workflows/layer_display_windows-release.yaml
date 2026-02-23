@@ -1,0 +1,30 @@
+name: Build and Release NinePad.exe for Windows
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up MinGW
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          args: -static
+
+      - name: Compile NinePad
+        run: |
+          cd layer_display_windows
+          g++ NinePad.cpp -o NinePad.exe -I. -L. -lhidapi -lsetupapi -luser32 -lgdi32 -lshell32 -mwindows
+        shell: cmd
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: layer_display_windows/NinePad.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
